@@ -27,7 +27,11 @@ public class Searcher {
 
         for(ScoreDoc scoreDoc : docs.scoreDocs){
             Document doc = indexSearcher.doc(scoreDoc.doc);
-            Series series = new Series(doc.get(Constants.NAME), doc.get(Constants.HREF));
+            Integer rating = 0;
+            if ( doc.get(Constants.RATING) != null) {
+                rating = Integer.valueOf(doc.get(Constants.RATING));
+            }
+            Series series = new Series(doc.get(Constants.NAME), doc.get(Constants.HREF), rating, doc.get(Constants.DESCRIPTION));
             searchResult.add(series);
         }
         return searchResult;

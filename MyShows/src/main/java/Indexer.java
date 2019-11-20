@@ -24,6 +24,8 @@ public class Indexer {
         Document document = new Document();
         document.add(new TextField(Constants.NAME, series.name, Field.Store.YES));
         document.add(new StringField(Constants.HREF, series.href, Field.Store.YES));
+        document.add(new IntPoint(Constants.RATING, series.rating));
+        document.add(new TextField(Constants.DESCRIPTION, series.description, Field.Store.YES));
         return document;
     }
 
