@@ -1,6 +1,4 @@
-import org.apache.lucene.document.IntPoint;
 import org.apache.lucene.queryparser.classic.ParseException;
-import org.json.simple.JSONObject;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -69,15 +67,26 @@ public class Main {
 
     public static void main(String[] args) throws IOException, InterruptedException, ParseException {
         ArrayList<Series> seriesArray = new ArrayList<Series>();
-        loadData(seriesArray);    // Uncommit for load data
+//        loadData(seriesArray);    // Uncommit for load data
+
         System.out.println("=== Searching start ===");
         Searcher searcher = new Searcher();
-        ArrayList<Series> byName = searcher.search(Constants.NAME, "Шерлок", indexPath);
+
+        // Task 2 - Search by text field
+        ArrayList<Series> byName = searcher.search(Constants.NAME, "Шерлок", indexPath, null);
         System.out.println("Results:");
         for (Series series : byName) {
             System.out.println(" " + series.name);
         }
-        System.out.println("=== Searching finish ===\n");
+
+        // Task 3 - Search in range
+        ArrayList<Series> byRange = searcher.search(Constants.RATING, "1", "2");
+        System.out.println("Results:");
+        for (Series series : byRange) {
+            System.out.println(" " + series.name);
+        }
+
+        System.out.println("=== Searching finish ===");
     }
 }
 

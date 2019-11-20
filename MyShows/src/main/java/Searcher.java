@@ -1,5 +1,6 @@
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
+import org.apache.lucene.document.IntPoint;
 import org.apache.lucene.index.*;
 import org.apache.lucene.queryparser.classic.*;
 import org.apache.lucene.search.*;
@@ -9,13 +10,18 @@ import java.io.*;
 import java.util.ArrayList;
 
 public class Searcher {
-    public ArrayList<Series> search(String constant, String text, String indexDirectoryPath) throws IOException, ParseException {
+    public ArrayList<Series> search(String constant, String text, String indexDirectoryPath, Query inputQuery) throws IOException, ParseException {
         Directory indexDirectory = FSDirectory.open(new File(indexDirectoryPath).toPath());
         IndexReader indexReader = DirectoryReader.open(indexDirectory);
         IndexSearcher indexSearcher = new IndexSearcher(indexReader);
 
-        QueryParser queryParser = new QueryParser(constant, new StandardAnalyzer());
-        Query query = queryParser.parse(text);
+        Query query = null;
+        if (inputQuery == null) {
+            QueryParser queryParser = new QueryParser(constant, new StandardAnalyzer());
+            query = queryParser.parse(text);
+        } else {
+            query = inputQuery;
+        }
         System.out.println("Search '" + query + "'");
 
         TopDocs docs = indexSearcher.search(query, 10000);
@@ -35,5 +41,13 @@ public class Searcher {
             searchResult.add(series);
         }
         return searchResult;
+    }
+
+    public ArrayList<Series> search(String constant, String lowerValue, String upperValue) throws IOException, ParseException {
+        Integer lowerRating =  Integer.parseInt(lowerValue);
+        Integer upperRating = Integer.parseInt(upperValue);
+        Query query = IntPoint.newRangeQuery(constant, lowerRating, upperRating);
+        ArrayList<Series> series =  search(null, null, "index", query);
+        return series;
     }
 }
