@@ -22,7 +22,7 @@ public class Searcher {
         } else {
             query = inputQuery;
         }
-        System.out.println("Search '" + query + "'");
+        System.out.println("\nSearch '" + query + "'");
 
         TopDocs docs = indexSearcher.search(query, 10000);
 
@@ -47,7 +47,14 @@ public class Searcher {
         Integer lowerRating =  Integer.parseInt(lowerValue);
         Integer upperRating = Integer.parseInt(upperValue);
         Query query = IntPoint.newRangeQuery(constant, lowerRating, upperRating);
-        ArrayList<Series> series =  search(null, null, "index", query);
+        ArrayList<Series> series = search(null, null, "index", query);
+        return series;
+    }
+
+    public ArrayList<Series> searchBySynonym(String text) throws ParseException, IOException {
+        QueryParser queryParser = new QueryParser(Constants.NAME, new SynonymAnalyzer());
+        Query query = queryParser.parse(text);
+        ArrayList<Series> series = search(null,null,"index", query);
         return series;
     }
 }

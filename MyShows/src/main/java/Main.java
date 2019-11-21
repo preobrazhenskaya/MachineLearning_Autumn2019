@@ -4,13 +4,11 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 
 public class Main {
     private static String indexPath = "index";
-    private static FileWriter dataFile;
 
     public static String findValue(String str, String start, char end) {
         String rez = "";
@@ -83,6 +81,16 @@ public class Main {
         ArrayList<Series> byRange = searcher.search(Constants.RATING, "1", "2");
         System.out.println("Results:");
         for (Series series : byRange) {
+            System.out.println(" " + series.name);
+        }
+
+        // Task 3 - Synonyms
+//        WordWorker.getWords();    // Uncommit for get all words
+//        Synonym.getSynonyms();    // Uncommit for get synonyms
+
+        ArrayList<Series> bySynonym = searcher.searchBySynonym("кот");
+        System.out.println("Results:");
+        for (Series series : bySynonym) {
             System.out.println(" " + series.name);
         }
 
