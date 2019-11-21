@@ -38,3 +38,6 @@ out/
 
 # OS X
 .DS_Store
+
+# W2V models
+model.bin
